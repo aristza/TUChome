@@ -33,6 +33,7 @@
     "electron": "^26.1.0"
   },
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
+    "electron-squirrel-startup": "^1.0.0",
+    "sql.js": "^1.8.0"
   }
 }
