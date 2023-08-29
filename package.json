@@ -1,0 +1,38 @@
+{
+  "name": "tuchome",
+  "version": "1.0.0",
+  "description": "TUChome management system",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron-forge start",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aristza/TUCmam.git"
+  },
+  "keywords": [
+    "TUC",
+    "TUChome"
+  ],
+  "author": "Aristarchos Tzatzos",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aristza/TUCmam/issues"
+  },
+  "homepage": "https://github.com/aristza/TUCmam#readme",
+  "devDependencies": {
+    "@electron-forge/cli": "^6.4.1",
+    "@electron-forge/maker-deb": "^6.4.1",
+    "@electron-forge/maker-rpm": "^6.4.1",
+    "@electron-forge/maker-squirrel": "^6.4.1",
+    "@electron-forge/maker-zip": "^6.4.1",
+    "@electron-forge/plugin-auto-unpack-natives": "^6.4.1",
+    "electron": "^26.1.0"
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.0"
+  }
+}
