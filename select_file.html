@@ -10,7 +10,10 @@
     <div class="container">
       <div id="drop-area">
         <div id="drop-area-contents">
-          <p>Drag and drop your .xlsx file here, or</br><b>click here to browse</b></p>
+          <p>
+            Drag and drop your .xlsx file here, or<br />
+            <b>click here to browse</b>
+          </p>
           <label for="file-input" id="file-label">click here to browse</label>
           <input type="file" id="file-input" accept=".xlsx" />
         </div>
@@ -54,8 +57,7 @@
       function handleFile(file) {
         if (file) {
           if (file.name.endsWith(".xlsx")) {
-            // Handle the file, e.g., upload it or process it
-            alert(`File selected: ${file.name}`);
+            window.electronAPI.fileSelected(file.path);
           } else {
             alert("Please select a .xlsx file.");
           }
