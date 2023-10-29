@@ -1,16 +1,47 @@
-body, html {
-    margin: 0px;
-    height: 100%;
+body,
+html {
+  margin: 0px;
+  height: 100%;
 }
 
 svg {
-    margin-left: auto;
-    margin-right: auto;
-    max-height: 100%;
-    display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-height: 100%;
+  display: block;
 }
 
-svg path, svg rect {
-    fill-opacity: 0.4;
-    fill: #0066a7;
+svg path,
+svg rect {
+  fill-opacity: 0.4;
+  fill: #0066a7;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+#drop-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80vw;
+  height: 80vh;
+  border: 2px dashed #ccc;
+  text-align: center;
+  padding: 20px;
+  cursor: pointer;
+}
+
+#file-input {
+  display: none;
+}
+
+#file-label {
+  font-weight: bold;
+  cursor: pointer;
+  display: none;
 }
