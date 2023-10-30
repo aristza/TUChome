@@ -1,32 +1,6 @@
-// const { remote } = require("electron");
-// const { BrowserWindow } = remote;
-// const win = BrowserWindow.getFocusedWindow();
-
 const searchInput = document.getElementById("searchInput");
 const suggestions = document.getElementById("suggestions");
-const minimizeButton = document.getElementById("minimize-btn");
-const maximizeButton = document.getElementById("maximize-btn");
-const closeButton = document.getElementById("close-btn");
 const suggestionItems = suggestions.querySelectorAll(".list-group-item");
-
-let selectedSuggestionIndex = -1;
-
-// Handle minimize, maximize, and close buttons
-// minimizeButton.addEventListener("click", () => {
-//   win.minimize();
-// });
-
-// maximizeButton.addEventListener("click", () => {
-//   if (win.isMaximized()) {
-//     win.unmaximize();
-//   } else {
-//     win.maximize();
-//   }
-// });
-
-// closeButton.addEventListener("click", () => {
-//   win.close();
-// });
 
 // Handle search bar with auto-suggestions (example)
 const data = [
@@ -104,10 +78,3 @@ function setSelectedSuggestion(index) {
     selectedSuggestionIndex = -1;
   }
 }
-
-// suggestions.addEventListener("click", (e) => {
-//   if (e.target.tagName === "LI") {
-//     searchInput.value = e.target.textContent;
-//     suggestions.innerHTML = "";
-//   }
-// });

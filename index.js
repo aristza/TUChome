@@ -5,36 +5,46 @@ const reader = require("xlsx");
 const fs = require("fs");
 const path = require("node:path");
 
-let filebuffer = fs.readFileSync("./database.db");
+let filebuffer = fs.readFileSync("misc/database.db");
 let db;
 let win;
 
 const createWindow = () => {
   win = new BrowserWindow({
-    width: 1012,
-    height: 600,
+    width: 1600,
+    height: 980,
     frame: false,
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
+      preload: path.join(__dirname, "scripts/preload.js"),
       nodeIntegration: true,
     },
   });
 
-  // To disable the menu
-  // const customMenu = Menu.buildFromTemplate([]);
-  // Menu.setApplicationMenu(customMenu);
-
-  win.loadFile("select_file.html");
-
-  // var clear = drag("#test");
+  win.loadFile("html/select_file.html");
 
   ipcMain.on("file-selected", (event, filePath) => {
     insertData(filePath);
-    win.loadFile("map.html");
+    win.loadFile("html/map.html");
   });
 
   ipcMain.on("room-selected", (event, roomId) => {
     console.log(fetchPeople(roomId));
+  });
+
+  ipcMain.on("win-minimize", () => {
+    win.minimize();
+  });
+
+  ipcMain.on("win-maximize", () => {
+    if (win.isMaximized()) {
+      win.unmaximize();
+    } else {
+      win.maximize();
+    }
+  });
+
+  ipcMain.on("win-close", () => {
+    win.close();
   });
 };
 
