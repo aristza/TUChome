@@ -1,4 +1,5 @@
 const { app, BrowserWindow, ipcMain, Menu } = require("electron");
+// const drag = require("electron-drag");
 const initSqlJs = require("sql.js");
 const reader = require("xlsx");
 const fs = require("fs");
@@ -6,21 +7,26 @@ const path = require("node:path");
 
 let filebuffer = fs.readFileSync("./database.db");
 let db;
+let win;
 
 const createWindow = () => {
-  const win = new BrowserWindow({
+  win = new BrowserWindow({
     width: 1012,
     height: 600,
+    frame: false,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
+      nodeIntegration: true,
     },
   });
 
   // To disable the menu
-  const customMenu = Menu.buildFromTemplate([]);
-  Menu.setApplicationMenu(customMenu);
+  // const customMenu = Menu.buildFromTemplate([]);
+  // Menu.setApplicationMenu(customMenu);
 
   win.loadFile("select_file.html");
+
+  // var clear = drag("#test");
 
   ipcMain.on("file-selected", (event, filePath) => {
     insertData(filePath);

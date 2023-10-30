@@ -2,13 +2,17 @@ body,
 html {
   margin: 0px;
   height: 100%;
+  width: 100%;
+  /* overflow: hidden; */
+  font-family: Arial, sans-serif;
 }
 
 svg {
-  margin-left: auto;
-  margin-right: auto;
-  max-height: 100%;
-  display: block;
+  /* margin-left: auto; */
+  /* margin-right: auto; */
+  /* max-height: 100%; */
+  width: 100%;
+  /* display: block; */
 }
 
 svg path,
@@ -22,6 +26,7 @@ svg rect {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  width: 100vw;
 }
 
 #drop-area {
@@ -44,4 +49,56 @@ svg rect {
   font-weight: bold;
   cursor: pointer;
   display: none;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  height: 60px;
+  align-items: center;
+  padding: 10px;
+  position: fixed;
+  width: 100vw;
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+}
+
+.header .search-bar,
+.header .window-controls {
+  -webkit-user-select: auto;
+  -webkit-app-region: no-drag;
+}
+
+.custom-icon img {
+  width: 30px;
+  height: 30px;
+}
+
+.search-bar {
+  flex-grow: 1;
+  padding: 0 10px;
+}
+
+#searchInput {
+  width: 100%;
+}
+
+#suggestions {
+  display: none;
+  background-color: #f8f9fa; /* Light gray background color */
+  border: 1px solid #ccc; /* Gray border */
+  position: absolute;
+  width: 100%;
+  z-index: 1; /* Ensure it appears above other elements */
+}
+
+.window-controls button {
+  font-size: 18px;
+  cursor: pointer;
+  margin: 0 5px;
+}
+
+.content {
+  background-color: #eee;
+  /* height: calc(100vh - 60px); */
 }
