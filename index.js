@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, Menu } = require("electron");
 const initSqlJs = require("sql.js");
 const reader = require("xlsx");
 const fs = require("fs");
@@ -9,18 +9,26 @@ let db;
 
 const createWindow = () => {
   const win = new BrowserWindow({
-    width: 980,
+    width: 1012,
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },
   });
 
+  // To disable the menu
+  const customMenu = Menu.buildFromTemplate([]);
+  Menu.setApplicationMenu(customMenu);
+
   win.loadFile("select_file.html");
 
   ipcMain.on("file-selected", (event, filePath) => {
     insertData(filePath);
     win.loadFile("map.html");
+  });
+
+  ipcMain.on("room-selected", (event, roomId) => {
+    console.log(fetchPeople(roomId));
   });
 };
 
@@ -31,9 +39,6 @@ app.whenReady().then(() => {
 initSqlJs().then(function (SQL) {
   // Load the db
   db = new SQL.Database(filebuffer);
-
-  // const stmt = db.prepare('SELECT * FROM "Complex"');
-  // while (stmt.step()) console.log(stmt.get());
 });
 
 function insertData(filePath) {
@@ -88,5 +93,29 @@ function insertData(filePath) {
     });
     stmtPerson.step();
     stmtPerson.reset();
+  }
+}
+
+function fetchPeople(roomId) {
+  const stmt = db.prepare('SELECT * FROM "Person" WHERE room = :roomId;');
+  stmt.bind({ ":roomId": roomId });
+
+  const people = [];
+  while (stmt.step()) people.push(new Person(stmt.get()));
+
+  return people;
+}
+
+class Person {
+  constructor(data) {
+    this.id = data[0];
+    this.surname = data[1];
+    this.name = data[2];
+    this.am = data[3];
+    this.department = data[4];
+    this.phone = data[5];
+    this.phoneSecondary = data[6];
+    this.mail = data[7];
+    this.roomId = data[9];
   }
 }
