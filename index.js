@@ -4,10 +4,12 @@ const initSqlJs = require("sql.js");
 const reader = require("xlsx");
 const fs = require("fs");
 const path = require("node:path");
+const { log } = require("console");
 
 let filebuffer = fs.readFileSync("misc/database.db");
 let db;
 let win;
+let complex = 0;
 
 const createWindow = () => {
   win = new BrowserWindow({
@@ -26,11 +28,11 @@ const createWindow = () => {
 ipcMain.on("file-selected", (event, filePath) => {
   insertData(filePath);
   navigateToNewPage("html/map.html");
-  navigateToNewPage("html/map.html");
 });
 
 ipcMain.on("room-selected", (event, roomId) => {
-  console.log(fetchPeople(roomId));
+  // console.log(fetchPeople(roomId));
+  console.log(roomId);
 });
 
 ipcMain.on("win-minimize", () => {
@@ -53,7 +55,8 @@ ipcMain.on("navigate-map", () => {
   navigateToNewPage("html/map.html");
 });
 
-ipcMain.on("navigate-complex", (num) => {
+ipcMain.on("navigate-complex", (event, num) => {
+  complex = num;
   navigateToNewPage("html/complex.html");
 });
 
