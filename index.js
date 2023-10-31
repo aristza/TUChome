@@ -20,33 +20,50 @@ const createWindow = () => {
     },
   });
 
-  win.loadFile("html/select_file.html");
-
-  ipcMain.on("file-selected", (event, filePath) => {
-    insertData(filePath);
-    win.loadFile("html/map.html");
-  });
-
-  ipcMain.on("room-selected", (event, roomId) => {
-    console.log(fetchPeople(roomId));
-  });
-
-  ipcMain.on("win-minimize", () => {
-    win.minimize();
-  });
-
-  ipcMain.on("win-maximize", () => {
-    if (win.isMaximized()) {
-      win.unmaximize();
-    } else {
-      win.maximize();
-    }
-  });
-
-  ipcMain.on("win-close", () => {
-    win.close();
-  });
+  navigateToNewPage("html/select_file.html");
 };
+
+ipcMain.on("file-selected", (event, filePath) => {
+  insertData(filePath);
+  navigateToNewPage("html/map.html");
+  navigateToNewPage("html/map.html");
+});
+
+ipcMain.on("room-selected", (event, roomId) => {
+  console.log(fetchPeople(roomId));
+});
+
+ipcMain.on("win-minimize", () => {
+  win.minimize();
+});
+
+ipcMain.on("win-maximize", () => {
+  if (win.isMaximized()) {
+    win.unmaximize();
+  } else {
+    win.maximize();
+  }
+});
+
+ipcMain.on("win-close", () => {
+  win.close();
+});
+
+ipcMain.on("navigate-map", () => {
+  navigateToNewPage("html/map.html");
+});
+
+ipcMain.on("navigate-complex", (num) => {
+  navigateToNewPage("html/complex.html");
+});
+
+// Use this for cacheless navigation
+function navigateToNewPage(page) {
+  win.loadFile(page);
+  win.webContents.on("did-finish-load", () => {
+    win.webContents.clearHistory();
+  });
+}
 
 app.whenReady().then(() => {
   createWindow();

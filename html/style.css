@@ -62,10 +62,10 @@ svg rect {
   -webkit-app-region: drag;
 }
 
-.header .search-bar,
-.header .window-controls {
+.header * {
   -webkit-user-select: auto;
   -webkit-app-region: no-drag;
+  -webkit-user-drag: none;
 }
 
 .custom-icon img {
