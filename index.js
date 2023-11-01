@@ -31,8 +31,7 @@ ipcMain.on("file-selected", (event, filePath) => {
 });
 
 ipcMain.on("room-selected", (event, roomId) => {
-  // console.log(fetchPeople(roomId));
-  console.log(roomId);
+  console.log(fetchPeople(roomId));
 });
 
 ipcMain.on("win-minimize", () => {
@@ -60,12 +59,15 @@ ipcMain.on("navigate-complex", (event, num) => {
   navigateToNewPage("html/complex.html");
 });
 
+var finishedLoadingHandler = function () {
+  win.webContents.clearHistory();
+  win.webContents.removeListener("did-finish-load", finishedLoadingHandler);
+};
+
 // Use this for cacheless navigation
 function navigateToNewPage(page) {
   win.loadFile(page);
-  win.webContents.on("did-finish-load", () => {
-    win.webContents.clearHistory();
-  });
+  win.webContents.on("did-finish-load", finishedLoadingHandler);
 }
 
 app.whenReady().then(() => {

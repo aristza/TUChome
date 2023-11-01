@@ -28,6 +28,44 @@
       </div>
     </div>
     <div class="content">
+      <div class="modal-container">
+        <div class="mt-4" id="person-1">
+          <div class="card">
+            <!-- prettier-ignore -->
+            <img src="../images/person.jpg" class="card-img-top" alt="Person's Image" />
+            <div class="card-body">
+              <h5 class="card-title">Ονοματεπώνυμο 1</h5>
+              <p class="card-text">ΣΧΟΛΗ - ΑΡΙΘΜΟΣ ΜΗΤΡΩΟΥ</p>
+              <p class="card-text">Τηλ.: ΚΙΝΗΤΟ 1 - ΚΙΝΗΤΟ 2</p>
+              <p class="card-text">Email: example@tuc.gr</p>
+              <!-- prettier-ignore -->
+              <p class="card-text"> Σχόλια: Δεν υπάρχουν!</p>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4" id="person-2">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Σχόλια δωματίου:</h5>
+              <p class="card-text">Δεν υπάρχουν!</p>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4" id="person-2">
+          <div class="card">
+            <!-- prettier-ignore -->
+            <img src="../images/person.jpg" class="card-img-top" alt="Person's Image" />
+            <div class="card-body">
+              <h5 class="card-title">Ονοματεπώνυμο 2</h5>
+              <p class="card-text">ΣΧΟΛΗ - ΑΡΙΘΜΟΣ ΜΗΤΡΩΟΥ</p>
+              <p class="card-text">Τηλ.: ΚΙΝΗΤΟ 1 - ΚΙΝΗΤΟ 2</p>
+              <p class="card-text">Email: example@tuc.gr</p>
+              <!-- prettier-ignore -->
+              <p class="card-text"> Σχόλια: Δεν υπάρχουν!</p>
+            </div>
+          </div>
+        </div>
+      </div>
       <svg
         viewBox="0 0 1920 1080"
         version="1.1"
@@ -266,8 +304,17 @@
     <script src="../scripts/header.js"></script>
     <script src="../scripts/searchbar.js"></script>
     <script>
+      const modalContainer = document.querySelector(".modal-container");
+
+      modalContainer.addEventListener("click", (event) => {
+        if (event.target === modalContainer) {
+          modalContainer.style.display = "none";
+        }
+      });
+
       function room(id) {
         window.electronAPI.roomSelected(id);
+        modalContainer.style.display = "flex";
       }
     </script>
   </body>
