@@ -27,6 +27,7 @@ const createWindow = () => {
 
 ipcMain.on("file-selected", (event, filePath) => {
   insertData(filePath);
+  calculateOccupancy();
   navigateToNewPage("html/map.html");
 });
 
@@ -157,6 +158,23 @@ function insertData(filePath) {
       stmtPerson.reset();
     }
   }
+}
+
+function calculateOccupancy() {
+  const stmt = db.prepare(`SELECT
+  belongsToComplex,
+  SUM(
+      CASE
+          WHEN "Type" = 'Δ' THEN 2
+          ELSE 1
+      END
+  ) AS positions
+FROM "Room"
+GROUP BY belongsToComplex;
+`);
+  const data = [];
+  while (stmt.step()) data.push(stmt.get());
+  console.log(data);
 }
 
 function fetchRoomData(roomId) {
