@@ -34,20 +34,24 @@
             <!-- prettier-ignore -->
             <img src="../images/person.jpg" class="card-img-top" alt="Person's Image" />
             <div class="card-body">
-              <h5 class="card-title">Ονοματεπώνυμο 1</h5>
-              <p class="card-text">ΣΧΟΛΗ - ΑΡΙΘΜΟΣ ΜΗΤΡΩΟΥ</p>
-              <p class="card-text">Τηλ.: ΚΙΝΗΤΟ 1 - ΚΙΝΗΤΟ 2</p>
-              <p class="card-text">Email: example@tuc.gr</p>
+              <h5 class="card-title person-name">Ονοματεπώνυμο 1</h5>
+              <p class="card-text person-dept">ΣΧΟΛΗ - ΑΡΙΘΜΟΣ ΜΗΤΡΩΟΥ</p>
+              <p class="card-text person-tel">Τηλ.: ΚΙΝΗΤΟ 1 - ΚΙΝΗΤΟ 2</p>
+              <p class="card-text person-email">Email: example@tuc.gr</p>
               <!-- prettier-ignore -->
-              <p class="card-text"> Σχόλια: Δεν υπάρχουν!</p>
+              <p class="card-text person-comments"> Σχόλια: Δεν υπάρχουν!</p>
             </div>
           </div>
         </div>
-        <div class="mt-4" id="person-2">
+        <div class="mt-4" id="room-info">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Σχόλια δωματίου:</h5>
-              <p class="card-text">Δεν υπάρχουν!</p>
+              <h5 class="card-title room-number">Στοιχεία δωματίου Χ:</h5>
+              <p class="card-text room-id">α/α: ΧΧΧ</p>
+              <p class="card-text room-type">Τύπος: Δεν υπάρχουν!</p>
+              <p class="card-text room-phone">Τηλέφωνο: Δεν υπάρχουν!</p>
+              <p class="card-text room-lan">Πρίζα Ίντερνετ: Δεν υπάρχουν!</p>
+              <p class="card-text room-comments">Σχόλια: Δεν υπάρχουν!</p>
             </div>
           </div>
         </div>
@@ -56,12 +60,12 @@
             <!-- prettier-ignore -->
             <img src="../images/person.jpg" class="card-img-top" alt="Person's Image" />
             <div class="card-body">
-              <h5 class="card-title">Ονοματεπώνυμο 2</h5>
-              <p class="card-text">ΣΧΟΛΗ - ΑΡΙΘΜΟΣ ΜΗΤΡΩΟΥ</p>
-              <p class="card-text">Τηλ.: ΚΙΝΗΤΟ 1 - ΚΙΝΗΤΟ 2</p>
-              <p class="card-text">Email: example@tuc.gr</p>
+              <h5 class="card-title person-name">Ονοματεπώνυμο 2</h5>
+              <p class="card-text person-dept">ΣΧΟΛΗ - ΑΡΙΘΜΟΣ ΜΗΤΡΩΟΥ</p>
+              <p class="card-text person-tel">Τηλ.: ΚΙΝΗΤΟ 1 - ΚΙΝΗΤΟ 2</p>
+              <p class="card-text person-email">Email: example@tuc.gr</p>
               <!-- prettier-ignore -->
-              <p class="card-text"> Σχόλια: Δεν υπάρχουν!</p>
+              <p class="card-text person-comments"> Σχόλια: Δεν υπάρχουν!</p>
             </div>
           </div>
         </div>
@@ -306,6 +310,31 @@
     <script>
       const modalContainer = document.querySelector(".modal-container");
 
+      const roomNumber = document.querySelector("#room-info .room-number");
+      const roomID = document.querySelector("#room-info .room-id");
+      const roomType = document.querySelector("#room-info .room-type");
+      const roomPhone = document.querySelector("#room-info .room-phone");
+      const roomLan = document.querySelector("#room-info .room-lan");
+      const roomComments = document.querySelector("#room-info .room-comments");
+
+      const person1Card = document.querySelector("#person-1");
+      const person1Name = document.querySelector("#person-1 .person-name");
+      const person1Dept = document.querySelector("#person-1 .person-dept");
+      const person1Tel = document.querySelector("#person-1 .person-tel");
+      const person1Email = document.querySelector("#person-1 .person-email");
+      const person1Comments = document.querySelector(
+        "#person-1 .person-comments"
+      );
+
+      const person2Card = document.querySelector("#person-2");
+      const person2Name = document.querySelector("#person-2 .person-name");
+      const person2Dept = document.querySelector("#person-2 .person-dept");
+      const person2Tel = document.querySelector("#person-2 .person-tel");
+      const person2Email = document.querySelector("#person-2 .person-email");
+      const person2Comments = document.querySelector(
+        "#person-2 .person-comments"
+      );
+
       modalContainer.addEventListener("click", (event) => {
         if (event.target === modalContainer) {
           modalContainer.style.display = "none";
@@ -314,7 +343,49 @@
 
       function room(id) {
         window.electronAPI.roomSelected(id);
-        modalContainer.style.display = "flex";
+        window.electronAPI.peopleList((event, data) => {
+          modalContainer.style.display = "flex";
+          if (data.length > 0) {
+            roomData = data[0];
+            let building;
+            if ((id - 1) / 30 < 1) building = "Α";
+            else building = "Β";
+            roomNumber.innerHTML =
+              "Στοιχεία Δωματίου " + building + roomData.number + ":";
+            roomID.innerHTML = "α/α: " + roomData.id;
+            roomType.innerHTML = "Τύπος: " + roomData.type;
+            roomPhone.innerHTML = "Τηλέφωνο: " + roomData.phone;
+            roomLan.innerHTML = "Πρίζα internet: " + roomData.lan;
+            roomComments.innerHTML = "Σχόλια: " + roomData.comments;
+          }
+
+          if (data.length > 1) {
+            person1 = data[1];
+            person1Name.innerHTML = person1.surname + " " + person1.name;
+            person1Dept.innerHTML = person1.department + " - " + person1.am;
+            person1Tel.innerHTML =
+              "Τηλ.: " + person1.phone + " - " + person1.phoneSecondary;
+            person1Email.innerHTML = "Email: " + person1.email;
+            person1Comments.innerHTML = "Σχόλια: " + person1.comments;
+            person1Card.style.display = "block";
+          } else {
+            person1Card.style.display = "none";
+          }
+
+          if (data.length > 2) {
+            person1 = data[2];
+            person2Name.innerHTML = person1.surname + " " + person1.name;
+            person2Dept.innerHTML = person1.department + " - " + person1.am;
+            person2Tel.innerHTML =
+              "Τηλ.: " + person1.phone + " - " + person1.phoneSecondary;
+            person2Email.innerHTML = "Email: " + person1.email;
+            person2Comments.innerHTML = "Σχόλια: " + person1.comments;
+            person2Card.style.display = "block";
+          } else {
+            person2Card.style.display = "none";
+          }
+          window.electronAPI.removeListenerPeopleList();
+        });
       }
     </script>
   </body>

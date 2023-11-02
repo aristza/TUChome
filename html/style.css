@@ -123,9 +123,14 @@ svg rect {
   left: 0;
   width: 100%;
   height: calc(100vh - 80px);
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.4);
   display: none;
   align-items: center;
   justify-content: space-around;
   z-index: 1;
+}
+
+#person-1,
+#person-2 {
+  display: none;
 }
