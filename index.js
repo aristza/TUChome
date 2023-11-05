@@ -27,8 +27,11 @@ const createWindow = () => {
 
 ipcMain.on("file-selected", (event, filePath) => {
   insertData(filePath);
-  calculateOccupancy();
   navigateToNewPage("html/map.html");
+});
+
+ipcMain.on("occupancy-requested", () => {
+  win.webContents.send("occupancy-list", calculateOccupancy());
 });
 
 ipcMain.on("room-selected", (event, roomId) => {
@@ -184,13 +187,11 @@ function calculateOccupancy() {
   `);
 
   const data = {};
-  data["positions"] = [];
-  data["occupancy"] = [];
-  while (stmt.step())
-    //   data["positions"].push({ [ParseInt(stmt.get()[0])]: stmt.get()[1] });
-    // while (stmtOccupancy.step()) data["occupancy"].push(stmtOccupancy.get()[1]);
-
-    console.log(data);
+  data["positions"] = {};
+  data["occupancy"] = {};
+  while (stmt.step()) data["positions"][stmt.get()[0]] = stmt.get()[1];
+  while (stmtOccupancy.step())
+    data["occupancy"][stmtOccupancy.get()[0]] = stmtOccupancy.get()[1];
   return data;
 }
 
