@@ -6,6 +6,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
   peopleList: (callback) => ipcRenderer.on("people-list", callback),
   removeListenerPeopleList: () =>
     ipcRenderer.removeListener("people-list", () => {}),
+
   minimizeWin: () => ipcRenderer.send("win-minimize"),
   maximizeWin: () => ipcRenderer.send("win-maximize"),
   closeWin: () => ipcRenderer.send("win-close"),

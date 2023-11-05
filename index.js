@@ -169,12 +169,29 @@ function calculateOccupancy() {
           ELSE 1
       END
   ) AS positions
-FROM "Room"
-GROUP BY belongsToComplex;
-`);
-  const data = [];
-  while (stmt.step()) data.push(stmt.get());
-  console.log(data);
+  FROM "Room"
+  GROUP BY belongsToComplex;
+  `);
+
+  const stmtOccupancy = db.prepare(`
+    SELECT
+    CASE
+      WHEN room >= 1 AND room <= 60 THEN 1
+      WHEN room >= 61 AND room <= 120 THEN 2
+      WHEN room >= 121 AND room <= 180 THEN 3
+    END as complex, COUNT(*) as occupancy
+    FROM "Person" GROUP BY complex;
+  `);
+
+  const data = {};
+  data["positions"] = [];
+  data["occupancy"] = [];
+  while (stmt.step())
+    //   data["positions"].push({ [ParseInt(stmt.get()[0])]: stmt.get()[1] });
+    // while (stmtOccupancy.step()) data["occupancy"].push(stmtOccupancy.get()[1]);
+
+    console.log(data);
+  return data;
 }
 
 function fetchRoomData(roomId) {
