@@ -10,6 +10,8 @@ let filebuffer = fs.readFileSync("misc/database.db");
 let db;
 let win;
 let complex = 0;
+var dataAwait = true;
+var dataAwaiting = [];
 
 const createWindow = () => {
   win = new BrowserWindow({
@@ -64,6 +66,28 @@ ipcMain.on("navigate-map", () => {
 ipcMain.on("navigate-complex", (event, num) => {
   complex = num;
   navigateToNewPage("html/complex.html");
+});
+
+ipcMain.on("rooms-occupancy-requested", () => {
+  win.send("rooms-occupancy-list", roomsOccupancy());
+});
+
+ipcMain.on("search-items-requested", () => {
+  win.send("search-items-list", allPeople());
+});
+
+ipcMain.on("search-item-selected", (event, roomId) => {
+  complex = Math.floor((roomId - 1) / 60) + 1;
+  navigateToNewPage("html/complex.html");
+  dataAwait = true;
+  dataAwaiting = fetchRoomData(roomId);
+});
+
+ipcMain.on("can-receive", () => {
+  if (!dataAwait) return;
+  win.webContents.send("people-list", dataAwaiting);
+  dataAwait = false;
+  dataAwaiting = [];
 });
 
 var finishedLoadingHandler = function () {
@@ -195,6 +219,29 @@ function calculateOccupancy() {
   return data;
 }
 
+function roomsOccupancy() {
+  const stmt = db.prepare(
+    `SELECT "Room".id, COUNT("Person".room), type, "Room".comments 
+    FROM "Room" LEFT JOIN "Person" on "Room".id = "Person".room
+    WHERE "Room".id >= :minId AND "Room".id <= :maxId 
+    GROUP BY "Room".id;`
+  );
+  const minId = (complex - 1) * 60 + 1;
+  stmt.bind({ ":minId": minId, ":maxId": minId + 59 });
+
+  const data = {};
+  data["occupancy"] = [];
+  data["type"] = [];
+  data["comments"] = [];
+  while (stmt.step()) {
+    data["occupancy"].push(stmt.get()[1]);
+    data["type"].push(stmt.get()[2]);
+    data["comments"].push(stmt.get()[3] === "Δεν υπάρχουν" ? 0 : 1);
+  }
+
+  return data;
+}
+
 function fetchRoomData(roomId) {
   const stmtRoom = db.prepare('SELECT * FROM "Room" WHERE id = :roomId;');
   stmtRoom.bind({ ":roomId": roomId });
@@ -204,6 +251,14 @@ function fetchRoomData(roomId) {
   const data = [];
   if (stmtRoom.step()) data.push(new Room(stmtRoom.get()));
   while (stmt.step()) data.push(new Person(stmt.get()));
+
+  return data;
+}
+
+function allPeople() {
+  const stmt = db.prepare('SELECT * FROM "Person";');
+  const data = [];
+  while (stmt.step()) data.push(new Person(stmt.get()).toString());
 
   return data;
 }
@@ -232,5 +287,23 @@ class Person {
     // photo is 8
     this.roomId = data[9];
     this.comments = data[10];
+  }
+
+  toString() {
+    return (
+      this.roomId +
+      ": " +
+      this.surname +
+      " " +
+      this.name +
+      " - " +
+      this.am +
+      ", " +
+      this.phone +
+      "/" +
+      this.phoneSecondary +
+      ", " +
+      this.email
+    );
   }
 }

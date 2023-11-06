@@ -3,20 +3,10 @@ const suggestions = document.getElementById("suggestions");
 const suggestionItems = suggestions.querySelectorAll(".list-group-item");
 
 // Handle search bar with auto-suggestions (example)
-const data = [
-  "Apple",
-  "Banana",
-  "Cherry",
-  "Date",
-  "Fig",
-  "Grape",
-  "Lemon",
-  "Mango",
-  "Orange",
-  "Peach",
-  "Pear",
-  "Plum",
-];
+var data = [];
+
+window.electronAPI.searchItems();
+window.electronAPI.searchItemsList((event, data2) => (data = data2));
 
 searchInput.addEventListener("input", () => {
   const value = searchInput.value.toLowerCase();
@@ -35,6 +25,7 @@ searchInput.addEventListener("input", () => {
 
       suggestion.addEventListener("click", () => {
         searchInput.value = item;
+        window.electronAPI.searchItemSelected(parseInt(item));
         suggestions.innerHTML = "";
       });
 
@@ -48,33 +39,33 @@ searchInput.addEventListener("input", () => {
   }
 });
 
-searchInput.addEventListener("keydown", (e) => {
-  if (suggestionItems.length === 0) return;
+// searchInput.addEventListener("keydown", (e) => {
+//   if (suggestionItems.length === 0) return;
 
-  if (e.key === "ArrowDown") {
-    e.preventDefault();
-    setSelectedSuggestion(selectedSuggestionIndex + 1);
-  } else if (e.key === "ArrowUp") {
-    e.preventDefault();
-    setSelectedSuggestion(selectedSuggestionIndex - 1);
-  } else if (e.key === "Enter") {
-    e.preventDefault();
-    if (
-      selectedSuggestionIndex >= 0 &&
-      selectedSuggestionIndex < suggestionItems.length
-    ) {
-      searchInput.value = suggestionItems[selectedSuggestionIndex].textContent;
-      suggestions.innerHTML = "";
-    }
-  }
-});
+//   if (e.key === "ArrowDown") {
+//     e.preventDefault();
+//     setSelectedSuggestion(selectedSuggestionIndex + 1);
+//   } else if (e.key === "ArrowUp") {
+//     e.preventDefault();
+//     setSelectedSuggestion(selectedSuggestionIndex - 1);
+//   } else if (e.key === "Enter") {
+//     e.preventDefault();
+//     if (
+//       selectedSuggestionIndex >= 0 &&
+//       selectedSuggestionIndex < suggestionItems.length
+//     ) {
+//       searchInput.value = suggestionItems[selectedSuggestionIndex].textContent;
+//       suggestions.innerHTML = "";
+//     }
+//   }
+// });
 
-function setSelectedSuggestion(index) {
-  suggestionItems.forEach((item) => item.classList.remove("active"));
-  if (index >= 0 && index < suggestionItems.length) {
-    suggestionItems[index].classList.add("active");
-    selectedSuggestionIndex = index;
-  } else {
-    selectedSuggestionIndex = -1;
-  }
-}
+// function setSelectedSuggestion(index) {
+//   suggestionItems.forEach((item) => item.classList.remove("active"));
+//   if (index >= 0 && index < suggestionItems.length) {
+//     suggestionItems[index].classList.add("active");
+//     selectedSuggestionIndex = index;
+//   } else {
+//     selectedSuggestionIndex = -1;
+//   }
+// }
